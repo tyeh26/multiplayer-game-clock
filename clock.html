@@ -1,0 +1,46 @@
+<html>
+	<head>
+		<script>
+			// EXAMPLE USAGE: clock.html?3*10 for a 3 person game 10 minutes apiece.
+			var params = window.location.search.replace("?", "").split("*");
+			var players = params[0];
+			var minutes = params[1];
+			var msPerPlayer = minutes * 60 * 1000;
+			var durations = [];
+			var paused = false;
+			for (var i = 0; i < players; i++) {
+				durations.push(msPerPlayer);
+			}
+			var currentPlayer = null;
+
+			// Refresh the UI
+			var refreshTimes = function() {
+				console.log(durations);
+			};
+
+			document.onkeydown = function(e) {
+				paused = true;
+			}
+
+			document.onkeyup = function(e) {
+				paused = false
+				if (currentPlayer !== null) {
+					currentPlayer = (currentPlayer + 1) % players;
+				} else {
+					currentPlayer = 0;
+				}
+			};
+
+			window.setInterval(function() {
+				if (currentPlayer !== null && durations[currentPlayer] > 0 && !paused) {
+					durations[currentPlayer]--;
+				}
+			}, 1);
+			window.setInterval(refreshTimes, 1000);
+
+		</script>
+	</head>
+	<body>
+		press any key to start
+	</body>
+</html>
